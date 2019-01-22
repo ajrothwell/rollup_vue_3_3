@@ -36,7 +36,7 @@
 <script>
   import debounce from 'lodash.debounce';
   import axios from 'axios';
-  import generateUniqueId from '../util/unique-id';
+  import generateUniqueId from '../../util/unique-id';
 
   export default {
     name: 'AddressInput',
