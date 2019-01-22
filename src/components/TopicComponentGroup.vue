@@ -21,9 +21,9 @@
   // import CollectionSummary from './CollectionSummary.vue';
   // import Division from './Division.vue';
   // import ePayForm from './ePayForm.vue';
-  // import ExternalLink from './ExternalLink.vue';
+  import ExternalLink from './ExternalLink/ExternalLink.vue';
   // import HorizontalTable from './HorizontalTable.vue';
-  // import Image_ from './Image.vue';
+  import Image_ from './Image/Image.vue';
   // import VerticalTable from './VerticalTable.vue';
   // import OverlayToggleGroup from './OverlayToggleGroup.vue';
   // import Paragraph from './Paragraph.vue';
@@ -48,9 +48,9 @@
       // CollectionSummary,
       // Division,
       // ePayForm,
-      // ExternalLink,
+      ExternalLink,
       // HorizontalTable,
-      // Image_,
+      Image_,
       // VerticalTable,
       // OverlayToggleGroup,
       // Paragraph,
