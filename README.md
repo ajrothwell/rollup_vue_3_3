@@ -1,4 +1,4 @@
-# rollup_vue_3
+# rollup_vue_6
 
 This was created to testing tree-shaking.
 
