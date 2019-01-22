@@ -1,5 +1,5 @@
 {
-  "name": "rollup_vue_3_3",
+  "name": "rollup_vue_6",
   "sideEffects": false,
   "version": "1.0.0",
   "main": "./main.js",
@@ -10,6 +10,7 @@
     "dev": "yarn build -w"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "vue": "^2.5.17"
   },
   "devDependencies": {
