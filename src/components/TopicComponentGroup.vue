@@ -17,7 +17,7 @@
   import AnyHeader from './AnyHeader/AnyHeader.vue';
   import Badge from './Badge/Badge.vue';
   import ButtonComp from './ButtonComp/ButtonComp.vue';
-  // import Callout from './Callout.vue';
+  import Callout from './Callout/Callout.vue';
   // import CollectionSummary from './CollectionSummary.vue';
   // import Division from './Division.vue';
   // import ePayForm from './ePayForm.vue';
@@ -44,7 +44,7 @@
     components: {
       Badge,
       ButtonComp,
-      // Callout,
+      Callout,
       // CollectionSummary,
       // Division,
       // ePayForm,
