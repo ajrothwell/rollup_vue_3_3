@@ -5,6 +5,19 @@
     >
       {{ evaluateSlot(slots.title) }}
     </h4>
+    <a class="button pvc-export-data-button"
+            v-if="this.shouldShowExportCSV"
+            @click="this.exportTableToCSV"
+    >
+      {{ this.options.export.formatButtons.csv }}
+    </a>
+    <a class="button pvc-export-data-button"
+            v-if="this.shouldShowExportPDF"
+            @click="this.exportTableToPDF"
+    >
+      {{ this.options.export.formatButtons.pdf }}
+    </a>
+
     <table>
       <tbody>
         <tr v-for="field in slots.fields">
@@ -46,6 +59,26 @@
         } else {
           return '';
         }
+      },
+      shouldShowExportPDF() {
+        let shouldExport = false;
+        if (this.options.export) {
+          if (this.options.export.formatButtons) {
+            const keys = Object.keys(this.options.export.formatButtons);
+            shouldExport = keys.includes('pdf');
+          }
+        }
+        return shouldExport;
+      },
+      shouldShowExportCSV() {
+        let shouldExport = false;
+        if (this.options.export) {
+          if (this.options.export.formatButtons) {
+            const keys = Object.keys(this.options.export.formatButtons);
+            shouldExport = keys.includes('csv');
+          }
+        }
+        return shouldExport;
       },
       shouldShowTable() {
         const hasData = this.hasData;
@@ -108,45 +141,22 @@
       exportTableToPDF() {
         const tableData = []
         let fields = [];
-        let totals = {};
-        for (let field of this.$props.options.fields) {
+        // let totals = {};
+        let theArray = []
+        // for (let field of this.$props.slots.fields) {
+        for (let field of this.$props.slots.fields) {
           fields.push(field.label)
-          totals[field.label] = 0;
-        }
-        for (let item of this.items) {
-          let theArray = []
-          for (let field of this.$props.options.fields) {
-            if (field['value'](this.$store.state, item) === null) {
-              theArray.push('');
-            } else {
-              theArray.push(field['value'](this.$store.state, item)) || '';
-            }
-
-            if (field['value'](this.$store.state, item) === null || isNaN(field['value'](this.$store.state, item))) {
-            // if (isNaN(field['value'](this.$store.state, item))) {
-              // console.log('isnull:', field['value'](this.$store.state, item));
-              totals[field.label] = ''
-            } else {
-              // console.log('is not null:', field['value'](this.$store.state, item));
-              totals[field.label] = totals[field.label] + parseFloat(field['value'](this.$store.state, item));
-            }
+          // totals[field.label] = 0;
+        // }
+          console.log('field:', field);
+          if (field['value'](this.$store.state) === null) {
+            theArray.push('');
+          } else {
+            theArray.push(field['value'](this.$store.state)) || '';
           }
-          tableData.push(theArray);
         }
+        tableData.push(theArray);
 
-        if (this.$props.options.totalRow.enabled) {
-          let theArray = []
-          for (let field of this.$props.options.fields) {
-            if (field.label.toLowerCase() === this.$props.options.totalRow.totalField) {
-              theArray.push('Total');
-            } else if (totals[field.label] === '') {
-              theArray.push('');
-            } else {
-              theArray.push(parseFloat(totals[field.label]).toFixed(2));
-            }
-          }
-          tableData.push(theArray);
-        }
         console.log('tableData:', tableData);
         // var doc = new jsPDF();
         var doc = new jsPDF('p', 'pt');
@@ -156,7 +166,9 @@
           doc.text(10, top, this.evaluateSlot(introLine));
           top = top + 12
         }
-        doc.autoTable(fields, tableData, {
+        doc.autoTable({
+          head: [fields],
+          body: tableData,
           startY: 100,
           tableWidth: 'wrap'
         });
@@ -176,35 +188,35 @@
         const tableData = []
 
         let fields = [];
-        let totals = {};
-        for (let field of this.$props.options.fields) {
+        // let totals = {};
+        let object = {}
+        for (let field of this.$props.slots.fields) {
           fields.push(field.label)
-          totals[field.label] = 0;
+          // totals[field.label] = 0;
+        // }
+        // for (let item of this.items) {
+        // for (let field of this.$props.options.fields) {
+          object[field.label] = field['value'](this.$store.state);
+          // if (isNaN(field['value'](this.$store.state))) {
+          //   totals[field.label] = null
+          // } else {
+          //   totals[field.label] = totals[field.label] + parseFloat(field['value'](this.$store.state));
+          // }
         }
-        for (let item of this.items) {
-          let object = {}
-          for (let field of this.$props.options.fields) {
-            object[field.label] = field['value'](this.$store.state, item);
-            if (isNaN(field['value'](this.$store.state, item))) {
-              totals[field.label] = null
-            } else {
-              totals[field.label] = totals[field.label] + parseFloat(field['value'](this.$store.state, item));
-            }
-          }
-          tableData.push(object);
-        }
+        tableData.push(object);
+        // }
 
-        if (this.$props.options.totalRow.enabled) {
-          let object = {}
-          for (let field of this.$props.options.fields) {
-            if (field.label.toLowerCase() === this.$props.options.totalRow.totalField) {
-              object[field.label] = 'Total';
-            } else {
-              object[field.label] = totals[field.label];
-            }
-          }
-          tableData.push(object);
-        }
+        // if (this.$props.options.totalRow.enabled) {
+        //   let object = {}
+        //   for (let field of this.$props.options.fields) {
+        //     if (field.label.toLowerCase() === this.$props.options.totalRow.totalField) {
+        //       object[field.label] = 'Total';
+        //     } else {
+        //       object[field.label] = totals[field.label];
+        //     }
+        //   }
+        //   tableData.push(object);
+        // }
         const opts = { fields };
 
         try {
@@ -233,16 +245,16 @@
           result += keys.join(columnDelimiter);
           result += lineDelimiter;
 
-          data.forEach(function(item) {
+          // data.forEach(function(item) {
               ctr = 0;
               keys.forEach(function(key) {
                   if (ctr > 0) result += columnDelimiter;
 
-                  result += item[key] || '';
+                  // result += item[key] || '';
                   ctr++;
               });
               result += lineDelimiter;
-          });
+          // });
 
           let csv = result;
 

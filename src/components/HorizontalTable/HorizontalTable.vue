@@ -611,8 +611,11 @@
           doc.text(10, top, this.evaluateSlot(introLine));
           top = top + 12
         }
-        console.log('still going 1');
-        doc.autoTable(fields, tableData, {
+        console.log('still going 1, fields:', fields, 'tableData:', tableData);
+        // doc.autoTable([fields], tableData, {
+        doc.autoTable({
+          head: [fields],
+          body: tableData,
           startY: 100,
           tableWidth: 'wrap'
         });
