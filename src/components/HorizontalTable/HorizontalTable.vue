@@ -604,16 +604,19 @@
         console.log('tableData:', tableData);
         // var doc = new jsPDF();
         var doc = new jsPDF('p', 'pt');
+        console.log('doc:', doc);
         doc.setFontSize(12);
         let top = 20;
         for (let introLine of this.$props.options.export.introLines) {
           doc.text(10, top, this.evaluateSlot(introLine));
           top = top + 12
         }
+        console.log('still going 1');
         doc.autoTable(fields, tableData, {
           startY: 100,
           tableWidth: 'wrap'
         });
+        console.log('still going 2');
 
         let filename;
         let fileStart = this.evaluateSlot(this.$props.options.export.file);
